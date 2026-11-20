@@ -19,6 +19,16 @@ public class HomeController : Controller
         {
             new QuestionAnswer
             {
+                Number = 9,
+                Topic = "REST & HTTP",
+                Question = "In ASP.NET Core Web API, what wrapper type allows action methods to return either a strongly typed domain object or standard HTTP status result helpers (such as Ok() , NotFound() )?",
+                Options = "A) Task<IActionResult>\nB) ActionResult<T>\nC) IActionResult\nD) HttpResponseMessage",
+                Answer = "B",
+                AnswerText = "ActionResult<T>",
+                Explanation = "ASP.NET Core provides ActionResult<T> as a hybrid return type wrapper. Because of implicit type conversion operators, an action method can return either an instance of type T (which ASP.NET Core automatically serializes to JSON with a 200 OK) or any ActionResult (such as NotFound(), BadRequest(), or CreatedAtAction()). This provides compile-time type checking and OpenAPI/Swagger schema documentation while retaining HTTP status code flexibility."
+            },
+            new QuestionAnswer
+            {
                 Number = 8,
                 Topic = "REST & HTTP",
                 Question = "Which HTTP verb is safe and idempotent, intended exclusively for retrieving resource data without altering server state?",
@@ -112,6 +122,7 @@ public class HomeController : Controller
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 }
+
 
 
 
