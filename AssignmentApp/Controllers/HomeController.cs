@@ -19,6 +19,16 @@ public class HomeController : Controller
         {
             new QuestionAnswer
             {
+                Number = 6,
+                Topic = "REST & HTTP",
+                Question = "Which of the following endpoint URIs follows RESTful resource-oriented naming best practices?",
+                Options = "A) GET /api/getAllCourses[3]\nB) GET /api/courses[3]\nC) POST /api/createNewCourseRecord[3]\nD) POST /api/deleteCourseById?id=5[3]",
+                Answer = "B",
+                AnswerText = "GET /api/courses",
+                Explanation = "RESTful API design emphasizes resource-oriented URIs using plural nouns (e.g., /api/courses) to represent entities. HTTP verbs (such as GET, POST, PUT, DELETE) communicate the intended action. Embedding RPC verbs or action names in URIs (such as getAllCourses or createNewCourseRecord) violates RESTful principles."
+            },
+            new QuestionAnswer
+            {
                 Number = 5,
                 Topic = "Status Codes",
                 Question = "When a DELETE request successfully removes a resource from the server and returns no content in the response body, which HTTP status code is standard?",
@@ -82,6 +92,7 @@ public class HomeController : Controller
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 }
+
 
 
 
