@@ -19,6 +19,16 @@ public class HomeController : Controller
         {
             new QuestionAnswer
             {
+                Number = 7,
+                Topic = "Controllers",
+                Question = "What is the primary function of the [Route(\"api/[controller]\")] attribute in ASP.NET Core?",
+                Options = "A) It connects the controller directly to an Entity Framework database context[2].\nB) It maps incoming URI request paths to the controller class using the class name token[1][2].\nC) It encrypts all incoming JSON payloads[2].\nD) It enables Cross-Origin Resource Sharing (CORS) for external React apps[2].",
+                Answer = "B",
+                AnswerText = "It maps incoming URI request paths to the controller class using the class name token.",
+                Explanation = "In ASP.NET Core attribute routing, [Route(\"api/[controller]\")] defines the base route template for all actions in the controller. The [controller] token is dynamically replaced at startup with the controller's class name minus the 'Controller' suffix (e.g., CoursesController resolves to api/courses)."
+            },
+            new QuestionAnswer
+            {
                 Number = 6,
                 Topic = "REST & HTTP",
                 Question = "Which of the following endpoint URIs follows RESTful resource-oriented naming best practices?",
@@ -92,6 +102,7 @@ public class HomeController : Controller
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 }
+
 
 
 
