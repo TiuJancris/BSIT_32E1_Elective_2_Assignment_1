@@ -19,6 +19,16 @@ public class HomeController : Controller
         {
             new QuestionAnswer
             {
+                Number = 4,
+                Topic = "Status Codes",
+                Question = "Which HTTP status code should an API return after successfully creating a new resource via a POST request, along with a Location header pointing to the new URI?",
+                Options = "A) 200 OK[3]\nB) 201 Created[1][3]\nC) 204 No Content[3]\nD) 404 Not Found[3]",
+                Answer = "B",
+                AnswerText = "201 Created",
+                Explanation = "According to HTTP/1.1 and REST conventions, an HTTP POST that results in the successful creation of a new resource should return status code 201 Created. The response must include a Location header containing the URI of the newly created resource (typically returned in ASP.NET Core via CreatedAtAction or CreatedAtRoute)."
+            },
+            new QuestionAnswer
+            {
                 Number = 3,
                 Topic = "Validation",
                 Question = "Which framework attribute automatically triggers an HTTP 400 Bad Request response when incoming request payloads fail structural model validation?",
@@ -62,6 +72,7 @@ public class HomeController : Controller
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 }
+
 
 
 
