@@ -19,6 +19,16 @@ public class HomeController : Controller
         {
             new QuestionAnswer
             {
+                Number = 8,
+                Topic = "REST & HTTP",
+                Question = "Which HTTP verb is safe and idempotent, intended exclusively for retrieving resource data without altering server state?",
+                Options = "A) POST[3]\nB) PUT[3]\nC) GET[1][3]\nD) DELETE[3]",
+                Answer = "C",
+                AnswerText = "GET",
+                Explanation = "In HTTP, a method is 'safe' if its semantics are read-only and do not cause state changes on the server. A method is 'idempotent' if making multiple identical requests has the same intended effect as a single request. GET is both safe and idempotent. (PUT and DELETE are idempotent but not safe; POST is neither)."
+            },
+            new QuestionAnswer
+            {
                 Number = 7,
                 Topic = "Controllers",
                 Question = "What is the primary function of the [Route(\"api/[controller]\")] attribute in ASP.NET Core?",
@@ -102,6 +112,7 @@ public class HomeController : Controller
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 }
+
 
 
 
