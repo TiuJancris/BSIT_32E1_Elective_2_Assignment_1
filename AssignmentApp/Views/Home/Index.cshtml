@@ -1,8 +1,280 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model IEnumerable<AssignmentApp.Models.QuestionAnswer>
+@{
+    ViewData["Title"] = "Assignment 1 - Questions & Answers";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container my-4">
+    <!-- Header Hero Section -->
+    <div class="card shadow-sm border-0 mb-4 text-white" style="background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); border-radius: 18px;">
+        <div class="card-body p-4 p-md-5 text-center">
+            <span class="badge bg-light text-primary px-3 py-2 rounded-pill fw-bold mb-3 text-uppercase tracking-wider">
+                BSIT 32E1 &bull; IT Elective 2
+            </span>
+            <h1 class="display-5 fw-bold mb-2">Assignment 1: ASP.NET Core MVC &amp; Web API Architecture</h1>
+            <p class="lead mb-3 text-white-50">Comprehensive Questions, Verified Answers, and Architectural Explanations</p>
+            <div class="d-inline-flex align-items-center bg-white bg-opacity-10 rounded-pill px-4 py-2 border border-white border-opacity-25">
+                <i class="bi bi-person-circle fs-5 me-2"></i>
+                <span class="fw-semibold">Student: <strong>Tiu, Jancris S.</strong></span>
+                <span class="mx-2">&bull;</span>
+                <span>Section: <strong>BSIT 32E1</strong></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Stats & Filter Toolbar -->
+    <div class="card shadow-sm border-0 mb-4" style="border-radius: 14px;">
+        <div class="card-body p-3">
+            <div class="row g-3 align-items-center">
+                <div class="col-md-5">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
+                        <input type="text" id="searchInput" class="form-control border-start-0" placeholder="Search questions, options, or topics..." onkeyup="filterQuestions()" />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <select id="topicFilter" class="form-select" onchange="filterQuestions()">
+                        <option value="ALL">All Topics (9 Questions)</option>
+                        <option value="Architecture">Architecture (SSR vs Web API)</option>
+                        <option value="Controllers">Controllers &amp; Routing</option>
+                        <option value="Validation">Model Validation</option>
+                        <option value="REST & HTTP">RESTful Design &amp; HTTP Verbs</option>
+                        <option value="Status Codes">HTTP Status Codes</option>
+                    </select>
+                </div>
+                <div class="col-md-3 text-md-end">
+                    <button class="btn btn-outline-primary btn-sm me-1" onclick="toggleAllExplanations()">
+                        <i class="bi bi-info-circle me-1"></i>Toggle Explanations
+                    </button>
+                    <a href="#apiDemo" class="btn btn-success btn-sm">
+                        <i class="bi bi-lightning-charge me-1"></i>Test API
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Question Cards Grid -->
+    <div class="row g-4" id="questionsContainer">
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var item in Model.OrderBy(q => q.Number))
+            {
+                <div class="col-lg-6 question-card-wrapper" data-number="@item.Number" data-topic="@item.Topic" data-search="@($"{item.Number} {item.Question} {item.Options} {item.Answer} {item.AnswerText} {item.Explanation} {item.Topic}".ToLower())">
+                    <div class="card h-100 shadow-sm border-0 rounded-4 overflow-hidden question-card">
+                        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center py-3">
+                            <div class="d-flex align-items-center">
+                                <span class="badge bg-white text-primary rounded-circle p-2 me-2 fs-6 fw-bold" style="width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center;">
+                                    @item.Number
+                                </span>
+                                <h5 class="card-title mb-0 fw-bold">Question @item.Number</h5>
+                            </div>
+                            @if (!string.IsNullOrEmpty(item.Topic))
+                            {
+                                <span class="badge bg-white bg-opacity-25 text-white rounded-pill px-3 py-1">@item.Topic</span>
+                            }
+                        </div>
+                        <div class="card-body bg-light p-4">
+                            <p class="card-text fw-bold fs-5 text-dark mb-3">@item.Question</p>
+                            <div class="p-3 bg-white border rounded-3 shadow-sm mb-3">
+                                @foreach (var line in item.Options.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
+                                {
+                                    var isCorrect = !string.IsNullOrEmpty(item.Answer) && line.TrimStart().StartsWith(item.Answer + ")", StringComparison.OrdinalIgnoreCase);
+                                    <div class="p-2 mb-2 rounded option-item @(isCorrect ? "bg-success bg-opacity-10 border border-success border-opacity-50 text-success fw-semibold" : "text-secondary")">
+                                        @if (isCorrect)
+                                        {
+                                            <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="bi bi-circle text-muted me-2"></i>
+                                        }
+                                        <span>@line</span>
+                                    </div>
+                                }
+                            </div>
+
+                            @if (!string.IsNullOrEmpty(item.Explanation))
+                            {
+                                <div class="explanation-box collapse show" id="explanation-@item.Number">
+                                    <div class="alert alert-info border-info border-opacity-25 rounded-3 mb-0 small">
+                                        <div class="fw-bold mb-1 text-primary"><i class="bi bi-lightbulb-fill me-1"></i>Architectural Explanation:</div>
+                                        <p class="mb-0 text-dark">@item.Explanation</p>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <div class="card-footer bg-success text-white py-3 px-4 d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="fs-6 opacity-75 text-uppercase fw-semibold">Correct Answer:</span>
+                                <div class="fs-5 fw-bold">
+                                    <span class="badge bg-white text-success px-2 py-1 me-1">@item.Answer</span>
+                                    @if (!string.IsNullOrEmpty(item.AnswerText))
+                                    {
+                                        <span class="small fw-normal">@item.AnswerText</span>
+                                    }
+                                </div>
+                            </div>
+                            @if (!string.IsNullOrEmpty(item.Explanation))
+                            {
+                                <button class="btn btn-sm btn-outline-light rounded-pill" type="button" data-bs-toggle="collapse" data-bs-target="#explanation-@item.Number">
+                                    Why?
+                                </button>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12 text-center py-5">
+                <div class="alert alert-warning">No questions found. Please check back shortly.</div>
+            </div>
+        }
+    </div>
+
+    <!-- Live API Testing Section demonstrating the Assignment concepts -->
+    <div class="card shadow-sm border-0 rounded-4 mt-5" id="apiDemo">
+        <div class="card-header bg-dark text-white py-3 px-4 rounded-top-4 d-flex justify-content-between align-items-center">
+            <div>
+                <h5 class="mb-0 fw-bold"><i class="bi bi-terminal me-2 text-warning"></i>Live RESTful Web API Demo (`CoursesApiController`)</h5>
+                <small class="text-white-50">Demonstrating `[ApiController]`, `ControllerBase`, `ActionResult&lt;T&gt;`, `GET /api/courses`, `POST 201`, `DELETE 204`, and `400 Bad Request`</small>
+            </div>
+            <span class="badge bg-success">Interactive</span>
+        </div>
+        <div class="card-body p-4 bg-light">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm p-3 bg-white">
+                        <h6 class="fw-bold text-primary"><i class="bi bi-play-circle me-1"></i>1. GET /api/courses</h6>
+                        <p class="small text-muted mb-3">Safe &amp; Idempotent retrieval of course resources returning 200 OK.</p>
+                        <button class="btn btn-outline-primary btn-sm mt-auto" onclick="callApi('GET', '/api/courses')">
+                            Send GET Request
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm p-3 bg-white">
+                        <h6 class="fw-bold text-success"><i class="bi bi-plus-circle me-1"></i>2. POST /api/courses (201 Created)</h6>
+                        <p class="small text-muted mb-3">Creates resource, returns 201 Created with `Location` header.</p>
+                        <button class="btn btn-outline-success btn-sm mt-auto" onclick="callApi('POST', '/api/courses', { title: 'Web Systems and Technologies', code: 'IT-321', units: 3 })">
+                            Send Valid POST
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm p-3 bg-white">
+                        <h6 class="fw-bold text-danger"><i class="bi bi-exclamation-triangle me-1"></i>3. POST Validation (400 Bad Request)</h6>
+                        <p class="small text-muted mb-3">Demonstrates `[ApiController]` auto-validation triggering 400 Bad Request.</p>
+                        <button class="btn btn-outline-danger btn-sm mt-auto" onclick="callApi('POST', '/api/courses', { title: '', code: '' })">
+                            Trigger 400 Validation
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Response viewer -->
+            <div class="mt-4">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="fw-bold text-secondary">HTTP Response Payload:</span>
+                    <span id="responseStatusBadge" class="badge bg-secondary">Awaiting request...</span>
+                </div>
+                <pre id="apiOutput" class="bg-dark text-light p-3 rounded-3" style="max-height: 250px; overflow-y: auto; font-family: 'Consolas', monospace; font-size: 0.9rem;">Click one of the buttons above to test the RESTful Web API live.</pre>
+            </div>
+        </div>
+    </div>
 </div>
+
+@section Scripts {
+    <script>
+        function filterQuestions() {
+            const query = document.getElementById('searchInput').value.toLowerCase().trim();
+            const topic = document.getElementById('topicFilter').value;
+            const cards = document.querySelectorAll('.question-card-wrapper');
+
+            cards.forEach(card => {
+                const cardTopic = card.getAttribute('data-topic');
+                const cardSearch = card.getAttribute('data-search');
+
+                const matchesTopic = (topic === 'ALL' || cardTopic === topic);
+                const matchesSearch = (!query || cardSearch.includes(query));
+
+                if (matchesTopic && matchesSearch) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        let allExpanded = true;
+        function toggleAllExplanations() {
+            const elements = document.querySelectorAll('.explanation-box');
+            allExpanded = !allExpanded;
+            elements.forEach(el => {
+                const collapse = bootstrap.Collapse.getOrCreateInstance(el, { toggle: false });
+                if (allExpanded) {
+                    collapse.show();
+                } else {
+                    collapse.hide();
+                }
+            });
+        }
+
+        async function callApi(method, url, body = null) {
+            const output = document.getElementById('apiOutput');
+            const statusBadge = document.getElementById('responseStatusBadge');
+            
+            output.innerText = `Sending ${method} request to ${url}...`;
+            statusBadge.className = 'badge bg-warning text-dark';
+            statusBadge.innerText = 'Loading...';
+
+            try {
+                const options = {
+                    method: method,
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                };
+                if (body) {
+                    options.body = JSON.stringify(body);
+                }
+
+                const response = await fetch(url, options);
+                let data = null;
+                const contentType = response.headers.get("content-type");
+                if (contentType && contentType.indexOf("application/json") !== -1) {
+                    data = await response.json();
+                } else {
+                    data = await response.text();
+                }
+
+                statusBadge.innerText = `HTTP ${response.status} ${response.statusText}`;
+                if (response.status >= 200 && response.status < 300) {
+                    statusBadge.className = 'badge bg-success';
+                } else if (response.status >= 400) {
+                    statusBadge.className = 'badge bg-danger';
+                }
+
+                let responseHeaders = {};
+                for (let [key, value] of response.headers.entries()) {
+                    responseHeaders[key] = value;
+                }
+
+                const result = {
+                    status: response.status,
+                    statusText: response.statusText,
+                    locationHeader: response.headers.get('location') || '(none)',
+                    body: data
+                };
+
+                output.innerText = JSON.stringify(result, null, 2);
+            } catch (err) {
+                statusBadge.className = 'badge bg-danger';
+                statusBadge.innerText = 'Network Error';
+                output.innerText = `Error: ${err.message}`;
+            }
+        }
+    </script>
+}
