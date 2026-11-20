@@ -19,6 +19,16 @@ public class HomeController : Controller
         {
             new QuestionAnswer
             {
+                Number = 3,
+                Topic = "Validation",
+                Question = "Which framework attribute automatically triggers an HTTP 400 Bad Request response when incoming request payloads fail structural model validation?",
+                Options = "A) [Route][2]\nB) [HttpGet][3]\nC) [ApiController][1][2]\nD) [FromQuery][2]",
+                Answer = "C",
+                AnswerText = "[ApiController]",
+                Explanation = "Applying the [ApiController] attribute to a controller class activates built-in API behaviors in ASP.NET Core. One of its primary benefits is automatic HTTP 400 Bad Request responses (formatted using ProblemDetails) whenever model validation fails (ModelState.IsValid == false), eliminating boilerplate validation checks in action methods."
+            },
+            new QuestionAnswer
+            {
                 Number = 2,
                 Topic = "Controllers",
                 Question = "Why do Web API controllers in ASP.NET Core inherit from ControllerBase instead of Controller ?",
@@ -52,5 +62,6 @@ public class HomeController : Controller
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 }
+
 
 
