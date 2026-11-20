@@ -19,6 +19,16 @@ public class HomeController : Controller
         {
             new QuestionAnswer
             {
+                Number = 2,
+                Topic = "Controllers",
+                Question = "Why do Web API controllers in ASP.NET Core inherit from ControllerBase instead of Controller ?",
+                Options = "A) ControllerBase supports Razor View rendering using View() and ViewData[2].\nB) ControllerBase provides essential HTTP handling and routing without carrying unnecessary HTML view rendering overhead[1][2].\nC) Controller is obsolete in .NET 8 and cannot handle HTTP POST requests[1].\nD) ControllerBase automatically creates SQLite database files on application startup[2].",
+                Answer = "B",
+                AnswerText = "ControllerBase provides essential HTTP handling and routing without carrying unnecessary HTML view rendering overhead.",
+                Explanation = "In ASP.NET Core, the Controller class inherits from ControllerBase and adds view engine support (such as View(), PartialView(), ViewData, and ViewBag). Because a Web API is decoupled and returns serialized data (JSON/XML) rather than HTML views, Web API controllers inherit directly from ControllerBase to avoid the overhead of the Razor view rendering pipeline."
+            },
+            new QuestionAnswer
+            {
                 Number = 1,
                 Topic = "Architecture",
                 Question = "What is the fundamental difference between Server-Side Rendering (SSR/MVC) and a Decoupled Web API architecture?",
@@ -42,4 +52,5 @@ public class HomeController : Controller
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 }
+
 
