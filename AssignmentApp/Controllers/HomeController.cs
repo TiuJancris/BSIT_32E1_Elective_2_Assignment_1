@@ -19,6 +19,16 @@ public class HomeController : Controller
         {
             new QuestionAnswer
             {
+                Number = 5,
+                Topic = "Status Codes",
+                Question = "When a DELETE request successfully removes a resource from the server and returns no content in the response body, which HTTP status code is standard?",
+                Options = "A) 200 OK[3]\nB) 201 Created[3]\nC) 204 No Content[3]\nD) 400 Bad Request[3]",
+                Answer = "C",
+                AnswerText = "204 No Content",
+                Explanation = "HTTP status code 204 No Content indicates that the request has succeeded, but that the client does not need to navigate away from its current page or parse a response body. It is the standard RESTful status code for DELETE operations that complete without returning an entity in the response body."
+            },
+            new QuestionAnswer
+            {
                 Number = 4,
                 Topic = "Status Codes",
                 Question = "Which HTTP status code should an API return after successfully creating a new resource via a POST request, along with a Location header pointing to the new URI?",
@@ -72,6 +82,7 @@ public class HomeController : Controller
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 }
+
 
 
 
